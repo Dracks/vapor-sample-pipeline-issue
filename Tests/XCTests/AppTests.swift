@@ -32,5 +32,10 @@ final class PipelineErrorTests: XCTestCase {
 		}
 	}
 
-	func testUpdateWithInvalidDefaultGroupId() async throws {}
+	func testRegex() async throws {
+		let regex = try Regex("^[A-Z]{2}(?:[ ]?[0-9]){18,20}_")
+		let fileTest = "DE19821450020041545900_EUR_11-08-2024_2056.csv"
+		let match = try? regex.firstMatch(in: fileTest)
+		XCTAssertNotNil(match)
+	}
 }
