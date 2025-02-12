@@ -1,7 +1,7 @@
 import Testing
 import VaporTesting
 
-@testable import App
+@testable import MrScroogeServer
 
 @Suite("App Tests")
 struct AppTests {

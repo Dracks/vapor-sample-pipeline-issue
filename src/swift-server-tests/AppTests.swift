@@ -2,7 +2,7 @@ import Foundation
 import XCTVapor
 import XCTest
 
-@testable import App
+@testable import MrScroogeServer
 
 final class PipelineErrorTests: XCTestCase {
 	var group: UserGroup?
