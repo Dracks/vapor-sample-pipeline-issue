@@ -5,7 +5,7 @@ import XCTest
 @testable import MrScroogeServer
 
 final class PipelineErrorTests: XCTestCase {
-	var group: UserGroup?
+	// var importerService: NewImportService!
 	var app: Application?
 
 	override func setUp() async throws {
@@ -18,24 +18,40 @@ final class PipelineErrorTests: XCTestCase {
 
 		let group = UserGroup(name: "Test User Group")
 		try await group.save(on: app.db)
-		// self.group = group
-		print("UserCreated")
+		app.logger.info("User created")
+
+		/*let testParsers: [ParserFactory] = try getParsers()
+		importerService = NewImportService(parsers: testParsers, withApp: app)
+		print("Set Up Correctly")*/
 	}
 
 	override func tearDown() async throws {
+		app?.logger.info("Tear down")
 		try await super.tearDown()
+
 		if let app {
+			app.logger.info("We have app")
 			try await app.asyncShutdown()
-			print("Async shutdown")
-			self.app = nil
+			app.logger.info("Shutting down")
+			// self.app = nil
 			print("Finish")
 		}
 	}
 
-	func testRegex() async throws {
+	func testRegexFile() async throws {
+		app?.logger.info("test Regex")
+		/*let factory = importerService.getParsers().first
+
+		XCTAssertNotNil(factory)
+		guard let factory else {
+			return
+		}*/
 		let regex = try Regex("^[A-Z]{2}(?:[ ]?[0-9]){18,20}_")
+
 		let fileTest = "DE19821450020041545900_EUR_11-08-2024_2056.csv"
 		let match = try? regex.firstMatch(in: fileTest)
 		XCTAssertNotNil(match)
 	}
+
+	func te_stUpdateWithInvalidDefaultGroupId() async throws {}
 }

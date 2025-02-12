@@ -2,21 +2,26 @@ import Fluent
 import FluentSQLiteDriver
 import Vapor
 
+public func registerMigrations(_ app: Application) async throws {
+	app.migrations.add(InitialMigration())
+}
+
 // configures your application
 public func configure(_ app: Application) async throws {
-	// uncomment to serve files from /Public folder
-	// app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
-	// register routes
-	//
-	app.databases.use(
-		DatabaseConfigurationFactory.sqlite(
-			.memory), as: .sqlite)
+	do {
 
-	app.migrations.add(InitialMigration())
+		try await registerMigrations(app)
 
-	if app.environment == .testing {
-		try await app.autoMigrate()
+		app.databases.use(
+			DatabaseConfigurationFactory.sqlite(
+				.memory), as: .sqlite)
+
+		if app.environment == .testing {
+			try await app.autoMigrate()
+		}
+
+	} catch {
+		print("Configure {}", String(reflecting: error))
+		throw error
 	}
-
-	try routes(app)
 }
